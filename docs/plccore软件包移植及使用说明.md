@@ -1,76 +1,76 @@
-# plccore��������ֲ��ʹ��˵��
+# plccore软件包移植及使用说明
 
-## ׼��
+## 准备
 
-1. RT-Thread Studio���������ص�ַ��https://www.rt-thread.org/page/studio.html��
-2. Stm32CubeMX���������ص�ַ��https://www.st.com/content/st_com/zh/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-configurators-and-code-generators/stm32cubemx.html��
-3. �������PLC IDE���ٶ���������: https://pan.baidu.com/s/1wCqSnEMLSoyQzc4SO8ZDXA ��ȡ��: aud4��
+1. RT-Thread Studio软件（下载地址：https://www.rt-thread.org/page/studio.html）
+2. Stm32CubeMX软件（下载地址：https://www.st.com/content/st_com/zh/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-configurators-and-code-generators/stm32cubemx.html）
+3. 编程软件PLC IDE（百度网盘链接: https://pan.baidu.com/s/1wCqSnEMLSoyQzc4SO8ZDXA 提取码: aud4）
 
-## ��ȡplccore������
+## 获取plccore软件包
 
-��ʽһ����github���أ�https://github.com/hyafz/plccore
+方式一：从github下载：https://github.com/hyafz/plccore
 
-## ʹ��RT-Thread Studio����Ŀ����BSP����
+## 使用RT-Thread Studio生成目标板的BSP工程
 
--�½�RT-Thread����
-���빤������
-ѡ�񹤳��ļ����·��
-ѡ��nano�汾
-ѡ�����оƬ
-ѡ���Ӧ��оƬ�ͺ�
-ѡ����Դ�ӡ�������
-ѡ����Կڣ�JTAG or SWD��
+-新建RT-Thread工程
+输入工程名称
+选择工程文件存放路径
+选择nano版本
+选择基于芯片
+选择对应的芯片型号
+选择调试打印输出串口
+选择调试口（JTAG or SWD）
 
-## ʹ��Stm32CubeMX����Ŀ������ù���
+## 使用Stm32CubeMX生成目标板配置工程
 
-����Ҫ��BSP���̷���ͬһĿ¼�£�
-- ����RCCʱ��
-- ��������λ��ͨ�ŵ�ר������
-������115200��8λ����λ��1λֹͣλ����У��
-������RTT���Դ�ӡ������ڲ�ͬ��
-������Ӧ����ȫ���жϣ������ж����ȼ���
-- ����PLCר��Ӳ����ʱ��
-��Ƶ��ʱ��Ϊ1MHz����ʱֵ1000����1ms�ж�һ�Ρ�
-������Ӧ��ʱ��ȫ���жϣ������ж����ȼ���
-- ���ùܽ����ԣ���ת���ʡ��������ȣ�
-����/ֹͣ����
-����/����ָʾ��
-���롢�����
-- ���湤�̲����ɴ���
+（不要与BSP工程放在同一目录下）
+- 配置RCC时钟
+- 配置与上位机通信的专属串口
+波特率115200、8位数据位、1位停止位、无校验
+必须与RTT调试打印输出串口不同，
+启动对应串口全局中断，设置中断优先级。
+- 配置PLC专属硬件定时器
+分频后时钟为1MHz，定时值1000，即1ms中断一次。
+启动对应定时器全局中断，设置中断优先级。
+- 配置管脚属性（翻转速率、上下拉等）
+启动/停止开关
+运行/错误指示灯
+输入、输出等
+- 保存工程并生成代码
 
-## ���Ʋ��޸�stm32f1xx_hal_msp.c�ļ�
+## 复制并修改stm32f1xx_hal_msp.c文件
 
-��Stm32CubeMX���ɹ��̵�srcĿ¼�¸���stm32f1xx_hal_msp.c�ļ���BSP����driversĿ¼���������޸ġ�
-��stm32f1xx_hal_msp.c�ļ��е�
+从Stm32CubeMX生成工程的src目录下复制stm32f1xx_hal_msp.c文件至BSP工程drivers目录，并进行修改。
+将stm32f1xx_hal_msp.c文件中的
 ```
 void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 ```
-�޸�Ϊ
+修改为
 ```
 void HAL_UART_MspInitEx(UART_HandleTypeDef* huart)
 ```
-��Ϊdrv_usart.c���Ѿ�ʵ����HAL_UART_MspInit()�������ظ����塣
-��
+因为drv_usart.c中已经实现了HAL_UART_MspInit()，不能重复定义。
+将
 ```
 #include "main.h"
 ```
-�޸�Ϊ��
+修改为：
 ```
 #include "board.h"
 ```
-## �޸�drv_usart.c
+## 修改drv_usart.c
 
-> ע�⣺�ٷ��ṩ��drv_usart.c�ļ�ʵ���е����⣬��Ҫ�޸ĺ����֧�ֶ�������豸��
+> 注意：官方提供的drv_usart.c文件实现有点问题，需要修改后才能支持多个串口设备。
 
-��
+将
 ```
 void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 ```
-����
+移至
 ```
 #endif /* RT_USING_CONSOLONE */
 ```
-��֮�󣬲��޸ĳ����£�
+行之后，并修改成如下：
 
 ```
 #endif /* RT_USING_CONSLONE */
@@ -89,21 +89,21 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
     HAL_UART_MspInitEx(huart);
 }
 ```
-## �޸�stm32f1xx_hal_conf.h�ļ�
+## 修改stm32f1xx_hal_conf.h文件
 
-�޸�BSP����driversĿ¼�µ�stm32f1xx_hal_conf.h��ʹ����Ӧ���������ģ�顣����ʹ�ܶ�ʱ��ģ��:
-��
+修改BSP工程drivers目录下的stm32f1xx_hal_conf.h，使能相应外设的驱动模块。比如使能定时器模块:
+将
 ```
 /*#define HAL_TIM_MODULE_ENABLED */
 ```
-�޸�Ϊ
+修改为
 ```
 #define HAL_TIM_MODULE_ENABLED
 ```
 
-## �޸�board.c�е�ʱ�����ú���
+## 修改board.c中的时钟配置函数
 
-RT-Thread Studio���ɵĹ���Ĭ��ʹ��HSIʱ�ӣ�ʵ�����ʹ����HSE��LSEʱ�ӣ�Ӧ���޸�ʱ�����ã�������CubeMX�����úú󣬽����ɵ�main.c�е�SystemClock_Config()��������board.c�е�SystemClock_Config()������
+RT-Thread Studio生成的工程默认使用HSI时钟，实际如果使用了HSE、LSE时钟，应该修改时钟配置，可以在CubeMX中配置好后，将生成的main.c中的SystemClock_Config()函数覆盖board.c中的SystemClock_Config()函数。
 ```
 /**
   * @brief System Clock Configuration
@@ -142,9 +142,9 @@ void SystemClock_Config(void)
   }
 }
 ```
-## ��board.c�������ж����������ú���
+## 在board.c中增加中断向量表配置函数
 
-> ע�⣺�����ʹ��IAP����ͨ���������س�����Ŀ�������Ҫִ�д˲������ʹ��JLINK��ST-Link���س��������˲���
+> 注意：如果想使用IAP程序通过串口下载程序至目标机，需要执行此步。如果使用JLINK、ST-Link下载程序，跳过此步。
 
 ```
 #define VECT_TAB_OFFSET  0x00006000U /*!< Vector Table base offset field.
@@ -158,16 +158,16 @@ void VectorTable_Config(void)
 #endif
 }
 ```
-## �޸�drv_common.c
+## 修改drv_common.c
 
-> ע�⣺�����ʹ��IAP����ͨ���������س�����Ŀ�������Ҫִ�д˲������ʹ��JLINK��ST-Link���س��������˲���
+> 注意：如果想使用IAP程序通过串口下载程序至目标机，需要执行此步。如果使用JLINK、ST-Link下载程序，跳过此步。
 
-�ں���rt_hw_board_init()�е���SystemClock_Config()֮�������������룺
+在函数rt_hw_board_init()中调用SystemClock_Config()之后增加下述代码：
 ```
     extern void VectorTable_Config(void);
     VectorTable_Config();
 ```
-����
+即：
 ```
     ...
     /* enable interrupt */
@@ -183,11 +183,11 @@ void VectorTable_Config(void)
     __set_PRIMASK(1);
     ...
 ```
-## �޸�link.lds
+## 修改link.lds
 
-> ע�⣺�����ʹ��IAP����ͨ���������س�����Ŀ�������Ҫִ�д˲������ʹ��JLINK��ST-Link���س��������˲���
+> 注意：如果想使用IAP程序通过串口下载程序至目标机，需要执行此步。如果使用JLINK、ST-Link下载程序，跳过此步。
 
-ROM ��ORIGIN��0x8000000�޸�Ϊ0x8006000��LENGTH����MCUʵ��ROM��С��д��
+ROM 的ORIGIN由0x8000000修改为0x8006000。LENGTH根据MCU实际ROM大小填写。
 
 ```
 /* Program Entry, set to mark it as "used" and avoid gc */
@@ -198,58 +198,22 @@ MEMORY
 }
 ```
 
-## ���Ʋ��޸�plccore����
+## 复制并修改plccore代码
 
-### ��plccore�ļ��и�����RTT Studio����Ŀ¼��
+### 将plccore文件夹复制至RTT Studio工程目录下
 
-### ��examples/Ŀ¼�¼���main.c��ճ����RTT Studio����Ŀ¼��
+### 修改plccore/port/plc_port.h各选项配置
 
-main.c
-```
-/*
- * Copyright (c) 2006-2019, RT-Thread Development Team
- *
- * SPDX-License-Identifier: Apache-2.0
- *
- * Change Logs:
- * Date           Author       Notes
- * 2019-09-09     RT-Thread    first version
- */
-
-#include <rtthread.h>
-
-#define DBG_TAG "main"
-#define DBG_LVL DBG_LOG
-#include <rtdbg.h>
-
-extern void plcMain(void);
-
-int main(void)
-{
-    plcMain();
-
-    while (1)
-    {
-        rt_thread_mdelay(1000);
-    }
-
-    return RT_EOK;
-}
-
-```
-
-### �޸�plccore/port/plc_port.h��ѡ������
-
-����Ŀ��弰ʵ������������ã�
-����Iӳ������С
-����Qӳ������С
-����Mӳ������С
+根据目标板及实际需求进行配置：
+配置I映像区大小
+配置Q映像区大小
+配置M映像区大小
 ...
 
-### �޸�plccore/port/plc_port.c�ļ�
+### 修改plccore/port/plc_port.c文件
 
-- ��Stm32CubeMX���ɹ��̵�srcĿ¼�µ�main.c�ļ��и���Ƭ���������ú�����plc_port.c
-���磺
+- 从Stm32CubeMX生成工程的src目录下的main.c文件中复制片上外设配置函数至plc_port.c
+例如：
 ```
 static void MX_TIM2_Init(void)
 {
@@ -267,8 +231,8 @@ static void MX_GPIO_Init(void)
 }
 
 ```
-- �����жϴ�����غ�����plc_port.c
-���磺
+- 复制中断处理相关函数至plc_port.c
+例如：
 ```
 
 /**
@@ -323,35 +287,71 @@ void TIM2_IRQHandler(void)
   /* USER CODE END TIM2_IRQn 1 */
 }
 ```
-- �޸�DevInput[]��DevOutput[]���������
-- ����ʵ������ʹ������޸�����������ʵ��
+- 修改DevInput[]与DevOutput[]数组的配置
+- 根据实际外设使用情况修改其它函数的实现
 
-### ��examples/Ŀ¼�¼���plcapp�ļ��У�ճ����RTT Studio����Ŀ¼��
+### 从examples/目录下剪切main.c，替换RT-Thread Studio工程自动生成的main.c文件
 
-plcapp�����PLC���ɿ����������������û��߼���������ͼ��ָ��������ɵ�C���Դ����ļ������临����RT-Thread Studio����Ŀ¼Ȼ����RT-Thread Studio����ˢ����Ŀ����
+main.c
+```
+/*
+ * Copyright (c) 2006-2019, RT-Thread Development Team
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2019-09-09     RT-Thread    first version
+ */
 
-## ���ð���·��
+#include <rtthread.h>
 
-��RT-Thread Studio���˵�����Ŀ��->�����ԡ�->��C/C++���桱->��·���ͷ��š�������hyacore��plctoc_output�İ���·����
+#define DBG_TAG "main"
+#define DBG_LVL DBG_LOG
+#include <rtdbg.h>
 
-## �޸�Ŀ���ļ���
+extern void plcMain(void);
 
-��RT-Thread Studio���˵�����Ŀ��->�����ԡ�->��C/C++������->�����á�->������������->��Artifact name:����д���µ����֡�
+int main(void)
+{
+    plcMain();
 
-## ����RT-Thread Studio����
+    while (1)
+    {
+        rt_thread_mdelay(1000);
+    }
 
-����ɹ�����ֲ��ɡ�
+    return RT_EOK;
+}
 
-## ��PLC IDE���ʹ��
+```
 
-��ֲ��ɺ󣬽�RT-Thread Studio�����ļ������帴����PLC IDEִ��Ŀ¼�µ�processorsĿ¼�У������Ϳ�����Ϊһ���µ�PLC������ʹ�á�
-��PLC IDE�У��û����Խ���PLCӦ�ù��̣�ʹ��PLC������ԣ�����ָ���������ͼ��ʵ���û��߼���Ȼ��ֱ�ӱ��롢���ӣ���������Ŀ��壬����ʵ���߼����ơ�
+### 从examples/目录下剪切plcapp文件夹，粘贴到RT-Thread Studio工程目录下
 
-## ע������
+plcapp存放了PLC集成开发环境软件根据用户逻辑程序（梯形图、指令表）生成的C语言代码文件，将其复制至RT-Thread Studio工程目录然后在RT-Thread Studio界面刷新项目树。
 
-Ŀǰ��֧��STM32ϵ��MCU��
-Ŀǰ��֧��RT-Thread nano�汾��
+## 设置包含路径
 
-## ����PLC IDE
+在RT-Thread Studio主菜单“项目”->“属性”->“C/C++常规”->“路径和符号”中添加plccore、plctapp的包含路径。
 
-PLC IDE��һ��ɱ�̿������ļ��ɿ���������ʵ���˷���IEC61131-3��׼������ģ�ͺͱ��ģ�ͣ�������ϵͳ��չ�Ժá�֧�ֱ�׼��ָ�����IL�����ṹ���ı���ST��������ͼ��LD����PLC������ԣ��ܹ���PLC�û��߼��������ΪĿ��Ӳ���Ķ�����Ŀ����룬ʵ�ֱ�����PLC������ڴ�ͳ�Ľ�����PLC��ָ��ִ��Ч�ʸ��ߣ��洢�ܶȸ��ߣ��Ҿ��и��ߵĿɿ��ԡ�
+## 修改目标文件名
+
+在RT-Thread Studio主菜单“项目”->“属性”->“C/C++构建”->“设置”->“构建工件”->“Artifact name:”中写入新的名字。
+
+## 编译RT-Thread Studio工程
+
+编译成功则移植完成。
+
+## 与PLC IDE结合使用
+
+移植完成后，将RT-Thread Studio工程文件夹整体复制至PLC IDE执行目录下的processors目录中，这样就可以作为一种新的PLC处理器使用。
+在PLC IDE中，用户可以建立PLC应用工程，使用PLC编程语言，比如指令表、梯形图等实现用户逻辑，然后直接编译、连接，再下载至目标板，即可实现逻辑控制。
+
+## 注意事项
+
+目前仅支持STM32系列MCU。
+目前仅支持RT-Thread nano版本。
+
+## 关于PLC IDE
+
+PLC IDE是一款可编程控制器的集成开发环境，实现了符合IEC61131-3标准的软件模型和编程模型，编程简单、配置灵活、系统扩展性好。支持标准的指令表（IL）、结构化文本（ST）、梯形图（LD）等PLC编程语言，能够将PLC用户逻辑代码编译为目标硬件的二进制目标代码，实现编译型PLC。相比于传统的解释型PLC，指令执行效率更高，存储密度更高，且具有更高的可靠性。
