@@ -305,7 +305,7 @@ void TIM2_IRQHandler(void)
 }
 ```
 - 修改 DevInput[] 与 DevOutput[] 数组的配置
-- 根据实际外设使用情况修改plc_poer.c中其它函数的实现
+- 根据实际外设使用情况修改plc_port.c中其它函数的实现
 
 ### 从examples/目录下 剪切 main.c，替换RT-Thread Studio工程自动生成的main.c文件
 > 注意是剪切，不能在工程里保留两个main.c文件。
