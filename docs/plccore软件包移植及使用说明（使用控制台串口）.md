@@ -24,6 +24,10 @@
 - 选择控制台串口
 - 选择调试口（JTAG or SWD）
 - 点击“完成”等待工程生成
+- 在RT-Thread Settings中禁用互斥量
+- 在RT-Thread Settings中禁用邮箱
+- 在RT-Thread Settings中使能消息队列
+
 ![新建RTT工程配置](images/new_rtt_project_config.png)
 
 ### 使用Stm32CubeMX生成目标板配置工程
