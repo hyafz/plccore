@@ -7,7 +7,7 @@
 
 1. RT-Thread Studio软件（下载地址：https://www.rt-thread.org/page/studio.html）
 2. Stm32CubeMX软件（下载地址：https://www.st.com/content/st_com/zh/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-configurators-and-code-generators/stm32cubemx.html）
-3. PLC组态及控制逻辑编程软件PLC IDE（百度网盘链接: https://pan.baidu.com/s/1wCqSnEMLSoyQzc4SO8ZDXA 提取码: aud4）
+3. PLC组态及控制逻辑编程软件PLC IDE（电子邮件联系 401190549@qq.com 索取）
 4. 获取plccore软件包
 方式一：从github下载：https://github.com/hyafz/plccore
 方式二：从码云下载：https://gitee.com/hyafz/plccore
