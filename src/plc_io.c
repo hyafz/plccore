@@ -122,7 +122,6 @@ int8_t isRunMode(void)
 	}else{
 		run_mode = 0;
 	}
-	run_mode = 1;   //test
 	return run_mode;
 }
 
