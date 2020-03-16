@@ -1,9 +1,11 @@
-# plccore软件包移植及使用说明
+plccore软件包移植及使用说明
+=========================
 
 本软件包目前仅支持意法半导体的STM32系列MCU，同时也仅针对RT-Thread nano v3.1.3进行了测试验证。推荐使用RT-Thread Studio + Stm32CubeMX两款软件进行移植，操作方便，文档教程详细，即使是新手也很容易上手。
 移植过程参考了RT-Thread官方提供的STM32系列BSP制作教程：https://github.com/RT-Thread/rt-thread/blob/master/bsp/stm32/docs/STM32%E7%B3%BB%E5%88%97BSP%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B.md 。
 
-## 准备
+---
+## 1. 准备
 
 1. RT-Thread Studio软件（下载地址：https://www.rt-thread.org/page/studio.html）
 2. Stm32CubeMX软件（下载地址：https://www.st.com/content/st_com/zh/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-configurators-and-code-generators/stm32cubemx.html）
@@ -12,7 +14,16 @@
 方式一：从github下载：https://github.com/hyafz/plccore
 方式二：从码云下载：https://gitee.com/hyafz/plccore
 
-## 使用RT-Thread Studio + Stm32CubeMX生成目标板的BSP工程
+---
+## 2. 硬件要求
+- 必须具备一个检测输入状态的GPIO作为运行开关状态检测；
+- 必须具备一个控制LED亮灭的GPIO作为运行状态显示灯（运行时亮，停止时灭）；
+- 必须具备一个控制LED亮灭的GPIO作为错误状态显示灯（正常时灭，错误时亮）；
+- 必须具备一个与上位机通信的串口；
+- 必须具备一个作为PLC主定时器的硬件定时器；
+
+---
+## 3. 使用RT-Thread Studio + Stm32CubeMX生成目标板的BSP工程
 
 ### 新建RT-Thread工程
 - 启动RT-Thread Studio，新建RT-Thread工程
@@ -24,32 +35,49 @@
 - 选择控制台串口
 - 选择调试口（JTAG or SWD）
 - 点击“完成”等待工程生成
+- 在RT-Thread Settings中使能消息队列
 - 在RT-Thread Settings中禁用互斥量
 - 在RT-Thread Settings中禁用邮箱
-- 在RT-Thread Settings中使能消息队列
+- 如果 **不使用控制台串口** ，在RT-Thread Settings中禁止“为rt_kprintf使用控制台”，推荐不使用控制台串口。
 
 ![新建RTT工程配置](images/new_rtt_project_config.png)
 
 ### 使用Stm32CubeMX生成目标板配置工程
 
-> 不要与BSP工程放在同一目录下!
+> ***不要与BSP工程放在同一目录下!***
 
 - 配置RCC时钟
-- 配置与上位机通信的专属串口（必须与控制台串口不同！）
+- 配置与上位机通信的专属串口（如果使用控制台串口，必须不同！）
 波特率115200、8位数据位、1位停止位、无校验
 启动对应串口全局中断，设置中断优先级。
 - 配置PLC专属硬件定时器
 分频后时钟为1MHz，定时值1000，即1ms中断一次。
 启动对应定时器全局中断，设置中断优先级。
 - 配置管脚属性（翻转速率、上下拉等）
-启动/停止开关
-运行/错误指示灯
-输入、输出等
+  - 运行开关
+  - 运行指示灯
+  - 错误指示灯
+  - 本地输入、输出管脚等
 - 保存工程并生成代码
 
-### 复制并修改stm32f1xx_hal_msp.c文件
+### 复制stm32f1xx_hal_msp.c文件
 
-从Stm32CubeMX生成工程的src目录下复制stm32f1xx_hal_msp.c文件至BSP工程drivers目录，并进行修改。
+从Stm32CubeMX生成工程的src目录下复制stm32f1xx_hal_msp.c文件至BSP工程drivers目录
+
+### 修改stm32f1xx_hal_msp.c包含的头文件
+
+将
+```
+#include "main.h"
+```
+修改为：
+```
+#include "board.h"
+```
+
+### 修改stm32f1xx_hal_msp.c中的HAL_UART_MspInit()函数
+
+> ***注意：如果使用控制台串口，需要执行本步骤，否则跳过。***
 
 因为drv_usart.c中已经实现了HAL_UART_MspInit()，不能重复定义，所以需要将stm32f1xx_hal_msp.c文件中的
 ```
@@ -60,18 +88,11 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 void HAL_UART_MspInitEx(UART_HandleTypeDef* huart)
 ```
 
-另外，还需要将
-```
-#include "main.h"
-```
-修改为：
-```
-#include "board.h"
-```
-
 ### 修改drv_usart.c
 
-> 注意：RTT Studio为nano生成的drv_usart.c文件的实现有点问题，需要修改后才能支持多个串口设备。
+> ***注意：如果使用控制台串口，需要执行本步骤，否则跳过。***
+
+RTT Studio为nano生成的drv_usart.c文件的实现有点问题，需要修改后才能支持多个串口设备。
 
 将
 ```
@@ -100,6 +121,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
     HAL_UART_MspInitEx(huart);
 }
 ```
+
 ### 修改stm32f1xx_hal_conf.h文件
 
 修改BSP工程drivers目录下的stm32f1xx_hal_conf.h，使能相应外设的驱动模块。比如使能定时器模块:
@@ -156,7 +178,7 @@ void SystemClock_Config(void)
 ```
 ### 在board.c中增加中断向量表配置函数
 
-> 注意：如果想使用IAP程序通过串口下载程序至目标机，需要执行此步。如果使用JLINK、ST-Link下载程序，跳过此步。
+> ***注意：如果想使用IAP程序通过串口下载程序至目标机，需要执行此步。如果使用JLINK、ST-Link下载程序，跳过此步。***
 
 ```
 #define VECT_TAB_OFFSET  0x00006000U /*!< Vector Table base offset field.
@@ -173,7 +195,7 @@ void VectorTable_Config(void)
 
 ### 修改drv_common.c
 
-> 注意：如果想使用IAP程序通过串口下载程序至目标机，需要执行此步。如果使用JLINK、ST-Link下载程序，跳过此步。
+> ***注意：如果想使用IAP程序通过串口下载程序至目标机，需要执行此步。如果使用JLINK、ST-Link下载程序，跳过此步。***
 
 在函数rt_hw_board_init()中调用SystemClock_Config()之后增加下述代码：
 ```
@@ -199,7 +221,7 @@ void VectorTable_Config(void)
 
 ### 修改link.lds
 
-> 注意：如果想使用IAP程序通过串口下载程序至目标机，需要执行此步。如果使用JLINK、ST-Link下载程序，跳过此步。
+> ***注意：如果想使用IAP程序通过串口下载程序至目标机，需要执行此步。如果使用JLINK、ST-Link下载程序，跳过此步。***
 
 ROM 的ORIGIN由0x8000000修改为0x8006000。LENGTH根据MCU实际ROM大小填写。
 
@@ -212,7 +234,8 @@ MEMORY
 }
 ```
 
-## 复制并修改plccore代码
+---
+## 4. 复制并修改plccore代码
 
 ### 将plccore文件夹复制至RTT Studio工程目录下
 
@@ -226,8 +249,7 @@ MEMORY
 
 ### 修改plccore/port/plc_port.c文件
 
-- 从Stm32CubeMX生成工程的src目录下的main.c文件中复制片上外设配置函数至plc_port.c
-例如：
+- 从Stm32CubeMX生成工程的src目录下的main.c文件中复制片上外设配置函数至plc_port.c，例如：
 ```
 static void MX_TIM2_Init(void)
 {
@@ -245,8 +267,7 @@ static void MX_GPIO_Init(void)
 }
 
 ```
-- 复制中断处理相关函数至plc_port.c
-例如：
+- 复制中断处理相关函数至plc_port.c，例如：
 ```
 
 /**
@@ -361,11 +382,15 @@ plcapp存放了PLC集成开发环境软件根据用户逻辑程序（梯形图�
 
 编译成功则移植完成。
 
-## 与PLC IDE结合使用
+---
+## 5. 与PLC IDE结合使用
 
 移植完成后，将RT-Thread Studio工程文件夹整体复制至PLC IDE执行目录下的processors目录中，这样就可以作为一种新的PLC处理器使用。
 在PLC IDE中，用户可以建立PLC应用工程，使用PLC编程语言，比如指令表、梯形图等实现用户逻辑，然后直接编译、连接，再下载至目标板，即可实现逻辑控制。
 
-## 关于PLC IDE
+### 关于PLC IDE
 
 PLC IDE是一款可编程控制器的集成开发环境，实现了符合IEC61131-3标准的软件模型和编程模型，编程简单、配置灵活、系统扩展性好。支持标准的指令表（IL）、结构化文本（ST）、梯形图（LD）等PLC编程语言，能够将PLC用户逻辑代码编译为目标硬件的二进制目标代码，实现编译型PLC。相比于传统的解释型PLC，指令执行效率更高，存储密度更高，且具有更高的可靠性。
+
+---
+## 结束
