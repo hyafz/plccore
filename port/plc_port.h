@@ -11,8 +11,11 @@
 #define MAX_Q_RANGE         256         /**< 输出映像区字节数 */
 #define MAX_M_RANGE         256         /**< 内存映像区字节数 */
 
-#define LOC_DI_NUM          1           /**< 本地1点数字量输入 */
-#define LOC_DQ_NUM          1           /**< 本地1点数字量输出 */
+#define LOC_DI_NUM          8           /**< 本地8点数字量输入 */
+#define LOC_DQ_NUM          6           /**< 本地6点数字量输出 */
+
+#define LOC_AI_NUM          1
+#define LOC_AQ_NUM          1
 
 /**
   * @brief 支持的数据类型使能选项

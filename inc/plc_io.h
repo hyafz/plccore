@@ -20,17 +20,18 @@
 #define DEV_OUTPUT_ON           1
 
 #define DEV_INPUT_NUM       (1 + LOC_DI_NUM)
-#define DEV_OUTPUT_NUM      (2 + LOC_DQ_NUM)
+#define DEV_OUTPUT_NUM      (3 + LOC_DQ_NUM)
 
 /* Input/Output Device IDs */
 #define DEV_RUN_SW_ID           0
 #define DEV_IX0_ID              1
 
 #define DEV_LED_RUN_ID          0
-#define DEV_LED_ERR_ID          1
-#define DEV_QX0_ID              2
+#define DEV_LED_STOP_ID         1
+#define DEV_LED_ERR_ID          2
+#define DEV_QX0_ID              3
 
-#define DEV_FIRST_OUTPUT_ID     DEV_QX0_ID
+#define DEV_FIRST_OUTPUT_ID     DEV_LED_RUN_ID
 #define DEV_LAST_OUTPUT_ID      (DEV_QX0_ID + LOC_DQ_NUM - 1)
 
 extern unsigned char devInputGet(unsigned int x);
@@ -76,6 +77,8 @@ int8_t isRunModeSwitched(void);
 void plcLocalDiRefresh(void);
 void plcLocalDqRefresh(void);
 void plcLocalDqOutputWhenStopped(void);
+void plcLocalAiRefresh(void);
+void plcLocalAqRefresh(void);
 
 
 #endif

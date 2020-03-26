@@ -176,10 +176,6 @@ void ledToggleUpdate(void)
   */
 void plcLocalDiRefresh(void)
 {
-#if (OS_CRITICAL_METHOD == 3)
-	OS_CPU_SR cpu_sr = 0u;
-#endif
-
 	int x;
 	unsigned char diTmp;
 	unsigned int offset;
@@ -220,3 +216,22 @@ void plcLocalDqOutputWhenStopped(void)
 }
 
 
+
+/**
+  * @brief PLC本地模拟量输入点映像区刷新。
+  */
+void plcLocalAiRefresh(void)
+{
+    rt_enter_critical();
+	//test
+    *(REAL *)&I[12] = 3.14159;
+    rt_exit_critical();
+}
+
+/**
+  * @brief PLC本地模拟量输出点状态刷新。
+  */
+void plcLocalAqRefresh(void)
+{
+
+}

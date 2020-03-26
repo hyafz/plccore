@@ -114,9 +114,10 @@ static void plcRscRunCycleBegin(RSC_CB_S* pRsc)
 	}
 	pRsc->cycleCnt ++;
 	
-	/* DI refresh */
+	/* DI/AI refresh */
 	begin = pRsc->cycleBegin;
     plcLocalDiRefresh();
+    plcLocalAiRefresh();
 	end = plcTimeUsecGet();
 	pRsc->diRefreshTime = timeConsumedCalc(begin, end);
 
@@ -132,9 +133,10 @@ static void plcRscRunCycleOver(RSC_CB_S* pRsc)
 {
 	UDINT begin, end;
 
-	/* DQ refresh */
+	/* DQ/AQ refresh */
 	begin = plcTimeUsecGet();
 	plcLocalDqRefresh();
+	plcLocalAqRefresh();
 	
 	/* 记录资源主循环周期结束时间 */
 	//pRsc->cycleEnd = statEventAdd(PLC_TASK_LOWEST_PRIORITY + 1, SE_RSC_CYCLE_OVER);
