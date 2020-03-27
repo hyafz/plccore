@@ -9,6 +9,7 @@
 
 #include "plc_type_define.h"
 #include "plc_port.h"
+#include <math.h>
 
 extern void debugOutput(unsigned int code);
 
@@ -279,8 +280,8 @@ typedef union Current_Result_Union
 #define CR_UINT_EQ(val)		(CR_UINT == (val))
 #define CR_UDINT_EQ(val)	(CR_UDINT == (val))
 #define CR_ULINT_EQ(val)	(CR_ULINT == (val))
-#define CR_REAL_EQ(val)		(CR_REAL == (val))
-#define CR_LREAL_EQ(val)	(CR_LREAL == (val))
+#define CR_REAL_EQ(val)		(fabs(CR_REAL - (val)) < 0.000001f)
+#define CR_LREAL_EQ(val)	(fabs(CR_LREAL - (val)) < 0.000001f)
 #define CR_TIME_EQ(val)		(CR_TIME == (val))
 #define CR_TOD_EQ(val)		(CR_TOD == (val))
 #define CR_DATE_EQ(val)		(CR_DATE == (val))
@@ -299,8 +300,8 @@ typedef union Current_Result_Union
 #define CR_UINT_NE(val)		(CR_UINT != (val))
 #define CR_UDINT_NE(val)	(CR_UDINT != (val))
 #define CR_ULINT_NE(val)	(CR_ULINT != (val))
-#define CR_REAL_NE(val)		(CR_REAL != (val))
-#define CR_LREAL_NE(val)	(CR_LREAL != (val))
+#define CR_REAL_NE(val)		(fabs(CR_REAL - (val)) > 0.000001f)
+#define CR_LREAL_NE(val)	(fabs(CR_LREAL - (val)) > 0.000001f)
 #define CR_TIME_NE(val)		(CR_TIME != (val))
 #define CR_TOD_NE(val)		(CR_TOD != (val))
 #define CR_DATE_NE(val)		(CR_DATE != (val))
