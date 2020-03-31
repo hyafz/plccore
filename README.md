@@ -2,10 +2,23 @@
 
 ## 1、介绍
 
+plccore是一个基于rt-thread的可编程控制器（PLC）运行时内核，与本人开发的上位机编程软件——plcide一起构成一套完整的可编程控制器开发系统。依托RT-Thread的大量板级支持包（BSP），plccore可以快速移植适配更多MCU，节省大量开发时间。对于MCU开发者，plcide + plccore + rt-thread提供一种图形化、表格化的方式来开发MCU控制程序，非常方便、简单。
 
-plccore是一个基于rt-thread的可编程控制器（PLC）运行时内核。
+### 1.1 plccore的目标
+开发plccore + plcide可编程控制器系统的目标有三点：
+- 实现完全遵循IEC61131-3标准的可扩展的开放型PLC编程系统，提高代码模块复用率；
+- 实现编译型PLC，相比解释型PLC不论指令密度还是执行效率都大大提升；
+- 探索使用图形化和表格化的形式开发嵌入式应用程序，简化MCU开发；
 
-### 1.1 目录结构
+### 1.2 plccore能做什么？
+对于MCU开发者，当你完成了RT-Thread + plccore移植后，可以使用plcide进行：
+1. 图形化编写控制逻辑，任意多平台复用
+2. 表格化配置多任务系统，不用写代码，支持不同的任务驱动模式：
+   - 循环执行
+   - 外部信号触发
+   - 定时触发
+
+### 1.3 目录结构
 
 | 名称 | 说明 |
 | ---- | ---- |
@@ -13,27 +26,37 @@ plccore是一个基于rt-thread的可编程控制器（PLC）运行时内核。
 | examples | 例子目录，并有相应的一些说明 |
 | inc  | 头文件目录 |
 | src  | 源代码目录 |
-| port | 移植代码目录。 |
+| port | 移植代码目录 |
 
-### 1.2 许可证
+### 1.4 许可证
 
 plccore package 遵循 LGPLv2.1 许可，详见 `LICENSE` 文件。
 
-### 1.3 依赖
+### 1.5 依赖
 
 - RT-Thread nano 3.1.3+
-- RT-Thread Studio软件（用于移植）
-- Stm32CubeMX软件（用于移植）
 
-## 3、使用 plccore
+## 2 如何移植plccore？
+请参考软件包docs目录下给出的移植教程：
+https://github.com/hyafz/plccore/blob/master/docs/plccore软件包移植及使用说明.md
 
-为了使plccore适配你的微处理器，需要进行一些移植工作。详细移植说明文档位于[`/docs`](/docs)下，使用前 **务必查看**
+## 3 如何获取上位机编程软件plcide？
+发送电子邮件至 401190549@qq.com 索取。
 
-## 4、注意事项
+## 4 如何使用plcide？
+请参考软件包docs目录下给出的PLC集成开发环境用户手册：
+https://github.com/hyafz/plccore/blob/master/docs/PLC集成开发环境用户手册.md
+以及编程参考手册：
+https://github.com/hyafz/plccore/blob/master/docs/IEC61131-3标准PLC编程参考手册.md
 
-移植过程需要使用STM32CubeMX与RT-Thread两个软件，请先安装好。
+## 5 示例
+目前提供一个示例：
+https://github.com/hyafz/plccore/blob/master/docs/PLC集成开发环境使用示例.md
+后续将增加更多的示例。
 
-## 5、联系方式 & 感谢
+## 6 联系方式 & 感谢
 
 * 维护：hyafz(401190549@qq.com)
 * 主页：https://github.com/hyafz/plccore
+
+## The End
