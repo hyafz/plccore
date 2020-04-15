@@ -45,6 +45,7 @@ plccore软件包移植及使用说明
 ### 使用Stm32CubeMX生成目标板配置工程
 
 > ***不要与BSP工程放在同一目录下!***
+> ***需要检查STM32CubeMX使用的固件库与RTT使用的版本是否一致***
 
 - 配置RCC时钟
 - 配置与上位机通信的专属串口（如果使用控制台串口，必须不同！）
@@ -59,6 +60,10 @@ plccore软件包移植及使用说明
   - 错误指示灯
   - 本地输入、输出管脚等
 - 保存工程并生成代码
+
+### 复制stm32f1xx_hal_conf.h文件
+
+从Stm32CubeMX生成工程的inc目录下复制stm32f1xx_hal_conf.h文件至BSP工程drivers目录
 
 ### 复制stm32f1xx_hal_msp.c文件
 
@@ -120,19 +125,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
     extern void HAL_UART_MspInitEx(UART_HandleTypeDef *huart);
     HAL_UART_MspInitEx(huart);
 }
-```
-
-### 修改stm32f1xx_hal_conf.h文件
-
-修改BSP工程drivers目录下的stm32f1xx_hal_conf.h，使能相应外设的驱动模块。比如使能定时器模块:
-
-将
-```
-/*#define HAL_TIM_MODULE_ENABLED */
-```
-修改为
-```
-#define HAL_TIM_MODULE_ENABLED
 ```
 
 ### 修改board.c中的时钟配置函数
