@@ -52,18 +52,18 @@ void dbg_assert(BOOL cond, char* file, unsigned int line)
 #endif
 
 #include "plc_comm.h" 
-extern void dataFrameSend(unsigned char cmd, unsigned char* data, int length);
+extern void plcCommDataFrameSend(unsigned char cmd, unsigned char* data, int length);
 
 void debugOutput(unsigned int code)
 {
 	unsigned char buf[4];
 	*(unsigned int*)buf = code;
-	dataFrameSend(CMD_DEBUG, buf, 4);
+	plcCommDataFrameSend(CMD_DEBUG, buf, 4);
 }
 
 void debugOutputStr(unsigned char *buf, int len)
 {
-	dataFrameSend(CMD_DEBUG, buf, len);
+    plcCommDataFrameSend(CMD_DEBUG, buf, len);
 }
 
 void debugLedToggle(void)

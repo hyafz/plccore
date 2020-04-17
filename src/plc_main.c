@@ -16,7 +16,16 @@
 /* Variables ----------------------------------------------------------------*/
 /* Private function declaration ---------------------------------------------*/
 /* Functions ----------------------------------------------------------------*/
-extern void plcProcessorInit(void);
+
+void plcProcessorInit(void)
+{
+    plcIOInit();
+
+    plcCommInit();
+
+    plcTimerInit();
+}
+
 /**
   * @brief PLC主函数
   */
@@ -24,11 +33,6 @@ void plcMain(void)
 {
 	/*初始化PLC*/
     plcProcessorInit();
-
-    devIOInit();
-
-    /* PLC主通信端口接收启动 */
-    devCommRxStart();
 
     /*PLC主定时器启动*/
     plcTimerStart();

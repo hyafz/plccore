@@ -14,9 +14,10 @@
 /* typedef ------------------------------------------------------------------*/
 /* Export variables declaration ---------------------------------------------*/
 /* Export function declaration ----------------------------------------------*/
+void plcTimerInit(void);
 void plcTimerStart(void);
 /*PLC定时器中断处理HOOK*/
-void plcTimerHook(void);
+void plcTimeoutCallback(void);
 /*获取PLC毫秒时间*/
 unsigned int plcTimeMsecGet(void);
 /*获取PLC微秒时间*/

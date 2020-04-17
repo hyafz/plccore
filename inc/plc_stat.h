@@ -64,7 +64,6 @@ typedef enum Stat_Event_Type_Enum{
 }STAT_EVT_TYPE_E;
 /* Export variables declaration ---------------------------------------------*/
 /* Export function declaration ----------------------------------------------*/
-void plcStatBssZeroTest(void);
 void statInit(void);
 void statBegin(void);
 void statStop(void);

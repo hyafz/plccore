@@ -158,7 +158,7 @@ static void plcRscRunCycleOver(RSC_CB_S* pRsc)
 	}
 	pRsc->cycleTimeSum += pRsc->cycleTime;
 	pRsc->cycleTimeAverage = pRsc->cycleTimeSum / pRsc->cycleCnt;
-	
+
 	statOutput();	/* 每次执行周期结束输出统计数据，然后清除。 */
 	statClear();
 }
@@ -172,10 +172,10 @@ void plcRscRunStatusUpdate(RSC_CB_S* pRscCB)
 		updateGapTime = 0;
 		pRscCB->updateTime = msTime;
 		/* 更新运行时统计数据 */
-		statEventAdd(PLC_TASK_LOWEST_PRIORITY + 1, SE_RSC_UPDATE);
-		plcRscStatDataOutput(pRscCB);	
+		//statEventAdd(PLC_TASK_LOWEST_PRIORITY + 1, SE_RSC_UPDATE);
+		//plcRscStatDataOutput(pRscCB);
 		/* 更新M区数据 */
-		dataFrameSend(CMD_M_OUTPUT, M, sizeof(M));
+		//plcCommDataFrameSend(CMD_M_OUTPUT, M, sizeof(M));
 	}
 }
 
@@ -242,17 +242,15 @@ static void plcTaskThreadEntry(void *pArg)
 			continue;
 		}
 
-		rt_enter_critical();
 		pTaskCB->taskSta = TASK_RUNNING;
-		rt_exit_critical();
 		
-		/* 记录任务当次开始运行时间，非默认任务需要记录起始事件，默认任务记录。 */
+		/* 记录任务当次开始运行时间，非默认任务需要记录起始事件，默认任务不记录。 */
 		prevBeginTime = pTaskCB->beginTime;
-		if(pTaskCB->priority == PLC_TASK_LOWEST_PRIORITY){
+		//if(pTaskCB->priority == PLC_TASK_LOWEST_PRIORITY){
 			pTaskCB->beginTime = plcTimeUsecGet();
-		}else{
-			pTaskCB->beginTime = statEventAdd(pTaskCB->priority, SE_TASK_BEGIN);
-		}
+		//}else{
+		//	pTaskCB->beginTime = statEventAdd(pTaskCB->priority, SE_TASK_BEGIN);
+		//}
 		/* 计算延迟时间，默认任务不考虑延迟时间 */
 		if(pTaskCB->trigCnt > 0){
 			pTaskCB->delayTime = timeConsumedCalc(pTaskCB->trigTime, pTaskCB->beginTime);
@@ -284,11 +282,11 @@ static void plcTaskThreadEntry(void *pArg)
 		pTaskCB->taskRun();
 
 		/* 记录任务当次运行结束时间，非默认任务需要记录结束事件，默认任务记录。 */
-		if(pTaskCB->priority == PLC_TASK_LOWEST_PRIORITY){
+		//if(pTaskCB->priority == PLC_TASK_LOWEST_PRIORITY){
 			pTaskCB->endTime = plcTimeUsecGet();
-		}else{
-			pTaskCB->endTime = statEventAdd(pTaskCB->priority, SE_TASK_OVER);
-		}
+		//}else{
+		//	pTaskCB->endTime = statEventAdd(pTaskCB->priority, SE_TASK_OVER);
+		//}
 		
 		/*计算任务运行时间*/
 		pTaskCB->runTime = timeConsumedCalc(pTaskCB->beginTime, pTaskCB->endTime);
@@ -307,9 +305,7 @@ static void plcTaskThreadEntry(void *pArg)
 
 		/** @todo 统计任务栈使用情况，RTT暂不支持 */
 
-		rt_enter_critical();
 		pTaskCB->taskSta = TASK_READY;
-		rt_exit_critical();
 		
 		/*任务执行完毕,发消息通知资源*/
 		plcSendMsgToRsc(PLC_RSC_EVT_TASK_RETURN, pTaskCB);
@@ -426,7 +422,8 @@ void plcRscRun(RSC_CB_S* pRscCB)
 	debugOutput(PLC_EVT_BEGIN_TO_RUN);	
 		
 	/* 记录资源启动时间 */
-	pRscCB->runTime = statEventAdd(PLC_TASK_LOWEST_PRIORITY + 1, SE_RSC_RUN);
+	//pRscCB->runTime = statEventAdd(PLC_TASK_LOWEST_PRIORITY + 1, SE_RSC_RUN);
+	pRscCB->runTime = plcTimeUsecGet();
 
 	/* 记录资源运行状态更新时间 */
 	pRscCB->updateTime = plcTimeMsecGet();
@@ -560,7 +557,8 @@ static void plcRscRunEntry(void* p_arg)
 			else if(PLC_RSC_EVT_TASK_TRIGGED == rscMsg.evt)
 			{
 				/* 有任务被触发，发送信号量启动该任务。 */
-				rscMsg.ptaskcb->trigTime = statEventAdd(rscMsg.ptaskcb->priority, SE_TASK_TRIGGED);
+				//rscMsg.ptaskcb->trigTime = statEventAdd(rscMsg.ptaskcb->priority, SE_TASK_TRIGGED);
+				rscMsg.ptaskcb->trigTime = plcTimeUsecGet();
 				rscMsg.ptaskcb->trigCnt++;
 				err = rt_sem_release(&(rscMsg.ptaskcb->semTask));
 				pRscCB->taskRunningCnt ++;

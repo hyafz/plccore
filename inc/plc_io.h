@@ -19,8 +19,8 @@
 #define DEV_OUTPUT_OFF          0
 #define DEV_OUTPUT_ON           1
 
-#define DEV_INPUT_NUM       (1 + LOC_DI_NUM)
-#define DEV_OUTPUT_NUM      (3 + LOC_DQ_NUM)
+#define DEV_INPUT_NUM           (1 + LOC_DI_NUM)
+#define DEV_OUTPUT_NUM          (3 + LOC_DQ_NUM)
 
 /* Input/Output Device IDs */
 #define DEV_RUN_SW_ID           0
@@ -36,10 +36,13 @@
 
 extern unsigned char devInputGet(unsigned int x);
 extern void devOutputSet(int8_t dev_id, uint8_t sw);
+
 #define LED_RUN_ON()            devOutputSet(DEV_LED_RUN_ID, DEV_OUTPUT_ON)
 #define LED_RUN_OFF()           devOutputSet(DEV_LED_RUN_ID, DEV_OUTPUT_OFF)
-// #define LED_ERR_ON()             devOutputSet(DEV_LED_ERR_ID, DEV_OUTPUT_ON)
-// #define LED_ERR_OFF()            devOutputSet(DEV_LED_ERR_ID, DEV_OUTPUT_OFF)
+#define LED_STOP_ON()           devOutputSet(DEV_LED_STOP_ID, DEV_OUTPUT_ON)
+#define LED_STOP_OFF()          devOutputSet(DEV_LED_STOP_ID, DEV_OUTPUT_OFF)
+#define LED_ERR_ON()            devOutputSet(DEV_LED_ERR_ID, DEV_OUTPUT_ON)
+#define LED_ERR_OFF()           devOutputSet(DEV_LED_ERR_ID, DEV_OUTPUT_OFF)
 
 /* typedef ------------------------------------------------------------------*/
 /**
@@ -47,11 +50,10 @@ extern void devOutputSet(int8_t dev_id, uint8_t sw);
   * @brief 输入设备控制结构体类型定义
   */
 typedef struct Device_Input_Control_Struct{
-    GPIO_TypeDef*       gpio;                     /**< 设备对应的GPIO */
-    uint16_t            pin;                      /**< 设备对应的PIN */
-    GPIO_PinState       default_state;            /**< 输入设备的默认状态 */
-    GPIO_PinState       prev_input_state;         /**< 上一次输入检测状态 */
-    GPIO_PinState       state;                    /**< 设备当前有效状态 */
+    rt_base_t           pin;                      /**< 设备对应的PIN */
+    int                 default_state;            /**< 输入设备的默认状态 */
+    int                 prev_input_state;         /**< 上一次输入检测状态 */
+    int                 state;                    /**< 设备当前有效状态 */
     uint8_t             state_debounce_time;      /**< 切换状态去抖计数 */
     uint32_t            state_stay_time;          /**< 当前状态保持时间 */
 }DEV_IN_CTRL_S;
@@ -61,17 +63,16 @@ typedef struct Device_Input_Control_Struct{
   * @brief 输出设备控制结构体类型定义
   */
 typedef struct Device_Output_Control_Struct{
-    GPIO_TypeDef*       gpio;                     /**< 设备对应的GPIO */
-    uint16_t            pin;                      /**< 设备对应的PIN */
-    GPIO_PinState       off_value;                /**< 输出关闭时GPIO PIN状态 */
-    GPIO_PinState       on_value;                 /**< 输出打开时GPIO PIN状态 */
-    GPIO_PinState       out_value;                /**< 当前输出GPIO PIN状态 */
+    rt_base_t           pin;                      /**< 设备对应的PIN */
+    int                 off_value;                /**< 输出关闭时GPIO PIN状态 */
+    int                 on_value;                 /**< 输出打开时GPIO PIN状态 */
+    int                 out_value;                /**< 当前输出GPIO PIN状态 */
 }DEV_OUT_CTRL_S;
 
 /* Export variables declaration ---------------------------------------------*/
 /* Export function declaration ----------------------------------------------*/
-void devIOInit(void);
-void devInputScan(void);
+void plcIOInit(void);
+void plcInputScan(void);
 int8_t isRunMode(void);
 int8_t isRunModeSwitched(void);
 void plcLocalDiRefresh(void);

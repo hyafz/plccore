@@ -23,14 +23,6 @@ unsigned int StatLastEvtTime = 0;  /**< 上一次事件发生的时间 */
 unsigned char StatFlag = 0;        /**< 统计功能标志 0: 统计停止，1: 统计进行. */
 /* Private function declaration ---------------------------------------------*/
 /* Functions ----------------------------------------------------------------*/
-void plcStatBssZeroTest(void)
-{
-	StatDataCnt = 0;
-	StatBeginTime = 0;
-	StatLastEvtTime = 0;
-	StatFlag = 0;
-}
-
 /**
   * @brief 统计功能初始化函数.
   */
@@ -209,7 +201,7 @@ void statOutput(void)
 {
 	if((StatFlag == 1) && (StatDataCnt > 0))
 	{
-		dataFrameSend(CMD_STAT_OUTPUT, StatDataRegion, StatDataCnt);
+	    plcCommDataFrameSend(CMD_STAT_OUTPUT, StatDataRegion, StatDataCnt);
 	}
 }
 

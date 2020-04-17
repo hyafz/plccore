@@ -20,26 +20,17 @@
 #define CMD_STAT_OUTPUT     0xDE
 #define CMD_RESPONSE_ERR    0xEE
 
-#define TX_DATA_BUF_SIZE    64
 #define RX_DATA_BUF_SIZE    126
 
 /* typedef ------------------------------------------------------------------*/
 /* Export variables declaration ---------------------------------------------*/
-extern unsigned char CommTxBuf[TX_DATA_BUF_SIZE];
-extern int CommTxLength;
-extern unsigned char CommTxFinished;
-
-extern unsigned short CommRxData;
 extern unsigned char CommRxBuf[RX_DATA_BUF_SIZE];
 extern unsigned int CommRxCnt;
-extern int CommRxTimeCnt;
 
-void devCommRxStart(void);
-void commRxTimeoutCheck(void);
-void dataFrameSend(unsigned char cmd, unsigned char* data, int length);
-void dataReceive(unsigned char data);
-void cmdReceiveAndCheck(unsigned char* pbuf, int length);
-void cmdProcess(void);
+void plcCommDataReceived();
+void plcCommDataFrameSend(unsigned char cmd, unsigned char* data, int length);
+void plcCommInit(void);
+void plcCommRxTimeoutCheck(void);
 
 #endif
 

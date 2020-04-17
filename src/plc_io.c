@@ -6,6 +6,9 @@
 /* includes -----------------------------------------------------------------*/
 #include <string.h>
 #include <rtthread.h>
+#ifdef RT_USING_DEVICE
+#include <rtdevice.h>
+#endif
 #include "plc_type_define.h"
 #include "plc_mem.h"
 #include "plc_io.h"
@@ -16,25 +19,39 @@
 /* Private typedef ----------------------------------------------------------*/
 /* Private macro ------------------------------------------------------------*/
 /* Variables ----------------------------------------------------------------*/
-extern DEV_IN_CTRL_S DevInput[];
-extern DEV_OUT_CTRL_S DevOutput[];
+/**
+ * @brief 输入设备控制结构数组
+ * @note 第0个数组成员必须为运行开关RUN Switch，然后依次是数字量输入点IX0 ~ IXn
+ */
+DEV_IN_CTRL_S DevInput[DEV_INPUT_NUM] = DI_INIT_INFO;
+/**
+ * @brief 输出设备控制结构数组
+ * @note 第0个必须为运行状态LED，第1个为停止状态LED，第2个为错误状态LED，然后依次是数字量输出点QX0 ~ QXn
+ */
+DEV_OUT_CTRL_S DevOutput[DEV_OUTPUT_NUM] = DO_INIT_INFO;
 /* Private function declaration ---------------------------------------------*/
 /* Functions ----------------------------------------------------------------*/
-extern unsigned char devInputPinRead(int id);
-extern void devOutputPinWrite(int id);
 
 /**
   * @brief 所有IO设备的初始化
 */
-void devIOInit(void)
+void plcIOInit(void)
 {
+#ifdef RT_USING_DEVICE
     int i;
-
+    for(i = 0; i < DEV_INPUT_NUM; i++){
+        rt_pin_mode(DevInput[i].pin, PIN_MODE_INPUT);
+    }
     for(i = 0; i < DEV_OUTPUT_NUM; i++){
+        rt_pin_mode(DevOutput[i].pin, PIN_MODE_OUTPUT);
         /* 为输出设备设置初始状态 */
         DevOutput[i].out_value = DevOutput[i].off_value;
-        devOutputPinWrite(i);
+        rt_pin_write(DevOutput[i].pin, DevOutput[i].out_value);
     }
+#else
+    extern void devIOInit(void);
+    devIOInit();
+#endif
 }
 
 /**
@@ -45,10 +62,10 @@ static int ScanTimeCnt = 0;         /* 扫描时间计数 */
 /**
   * @brief 输入设备状态扫描
   */
-void devInputScan(void)
+void plcInputScan(void)
 {
     int i;
-    GPIO_PinState curr_input_state;
+    int curr_input_state;
 
     ScanTimeCnt++;
     if(ScanTimeCnt < DEV_INPUT_SCAN_GAP_TIME){
@@ -57,7 +74,12 @@ void devInputScan(void)
     ScanTimeCnt = 0;
 
     for(i = 0; i < DEV_INPUT_NUM; i++){
-        curr_input_state = devInputPinRead(i);
+#ifdef RT_USING_DEVICE
+        curr_input_state = rt_pin_read(DevInput[i].pin);
+#else
+        extern unsigned char devInputPinRead(unsigned int pin);
+        curr_input_state = devInputPinRead(DevInput[i].pin);
+#endif
         if(curr_input_state == DevInput[i].state){
             //输入状态与当前状态一致，没有变化，判断下一个输入点。
             continue;
@@ -106,7 +128,12 @@ void devOutputSet(int8_t dev_id, uint8_t sw)
   }else{
     DevOutput[dev_id].out_value = DevOutput[dev_id].off_value;
   }
-  devOutputPinWrite(dev_id);
+#ifdef RT_USING_DEVICE
+  rt_pin_write(DevOutput[dev_id].pin, DevOutput[dev_id].out_value);
+#else
+  extern void devOutputPinWrite(unsigned int pin, unsigned int val);
+  devOutputPinWrite(DevOutput[dev_id].pin, DevOutput[dev_id].out_value);
+#endif
 }
 
 /**
@@ -180,7 +207,6 @@ void plcLocalDiRefresh(void)
 	unsigned char diTmp;
 	unsigned int offset;
 
-	rt_enter_critical();
 	for(x = 0; x < LOC_DI_NUM; x++){
 		offset = x % 8;
 		if(offset == 0){
@@ -191,7 +217,6 @@ void plcLocalDiRefresh(void)
 			I[x / 8] = diTmp;
 		}
 	}
-	rt_exit_critical();
 }
 
 /**
@@ -222,10 +247,8 @@ void plcLocalDqOutputWhenStopped(void)
   */
 void plcLocalAiRefresh(void)
 {
-    rt_enter_critical();
 	//test
     *(REAL *)&I[12] = 3.14159;
-    rt_exit_critical();
 }
 
 /**
