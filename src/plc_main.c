@@ -34,9 +34,6 @@ void plcMain(void)
 	/*初始化PLC*/
     plcProcessorInit();
 
-    /*PLC主定时器启动*/
-    plcTimerStart();
-
     /*初始化统计功能*/
     statInit();
 

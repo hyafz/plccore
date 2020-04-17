@@ -12,6 +12,7 @@
 #include "plc_cfg.h"
 #include "plc_io.h"
 #include "plc_comm.h"
+#include "plc_timer.h"
 
 /* Private define -----------------------------------------------------------*/
 /* Private typedef ----------------------------------------------------------*/
@@ -105,6 +106,9 @@ void plcTimerInit(void)
     extern void devTimerInit();
     devTimerInit();
 #endif
+
+    /*PLC主定时器启动*/
+    plcTimerStart();
 }
 
 /**
@@ -122,9 +126,7 @@ void plcTimerStart(void)
         rt_kprintf("set timeout value failed\n");
     }
 #else
-    extern void devTimerInit(void);
     extern void devTimerStart(void);
-    devTimerInit();
     devTimerStart();
 #endif
 }
