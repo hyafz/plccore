@@ -71,6 +71,12 @@
 #define LOC_AI_NUM              1
 #define LOC_AQ_NUM              1
 
+#define LOC_PWM_NUM             2           /**< 本地PWM输出通道数目 */
+#define LOC_PWM_CTRL_BASE       248         /**< 本地PWM输出控制参数在Q区的起始映射地址，控制参数区占用4字节：
+                                                 Byte 1 ~ 2: PWM周期，单位us，为0则停止输出
+                                                 Byte 3    : PWM占空比 0 ~ 100，为0则停止输出
+                                                 Byte 4    : PWM模式 */
+
 /**
   * @brief 支持的数据类型使能选项
   <pre>
@@ -93,6 +99,11 @@
 
 #define DT_64BIT_EN                    0  /**< 支持64位长度数据类型的选项(0: 不支持, 1: 支持) */
 #if (DT_64BIT_EN > 0)
+#define DT_LINT_EN                     0
+#define DT_ULINT_EN                    0
+#define DT_LREAL_EN                    0
+#define DT_LWORD_EN                    0
+#else
 #define DT_LINT_EN                     0
 #define DT_ULINT_EN                    0
 #define DT_LREAL_EN                    0

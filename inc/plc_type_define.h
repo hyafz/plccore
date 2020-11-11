@@ -60,6 +60,36 @@ typedef unsigned short               UINT16;
 typedef unsigned int                 UINT32;
 typedef unsigned long long           UINT64;
 
+/* 各种数据类型变量的默认初始值 */
+#define _BOOL_DEFAULT                0
+#define _BYTE_DEFAULT                0
+#define _SINT_DEFAULT                0
+#define _USINT_DEFAULT              0
+
+#define _WORD_DEFAULT                0
+#define _INT_DEFAULT                0
+#define _UINT_DEFAULT                0
+
+#define _DWORD_DEFAULT                0
+#define _DINT_DEFAULT                0
+#define _UDINT_DEFAULT                0
+#define _REAL_DEFAULT                0
+#define _TIME_DEFAULT                0
+#define _DATE_DEFAULT                0
+#define _TIME_OF_DAY_DEFAULT         0
+#define _TOD_DEFAULT                0
+#define _DATE_AND_TIME_DEFAULT      0
+#define _DT_DEFAULT                0
+#define _LWORD_DEFAULT                0
+#define _LINT_DEFAULT                0
+#define _ULINT_DEFAULT                0
+#define _LREAL_DEFAULT                0
+#define _UINT8_DEFAULT                0
+#define _UINT16_DEFAULT                0
+#define _UINT32_DEFAULT                0
+#define _UINT64_DEFAULT                0
+
+
 #endif
 
 

@@ -29,6 +29,10 @@ DEV_IN_CTRL_S DevInput[DEV_INPUT_NUM] = DI_INIT_INFO;
  * @note 第0个必须为运行状态LED，第1个为停止状态LED，第2个为错误状态LED，然后依次是数字量输出点QX0 ~ QXn
  */
 DEV_OUT_CTRL_S DevOutput[DEV_OUTPUT_NUM] = DO_INIT_INFO;
+
+#if (LOC_PWM_NUM > 0)
+PWM_OUT_CTRL_S PwmOutCtrl[LOC_PWM_NUM];
+#endif
 /* Private function declaration ---------------------------------------------*/
 /* Functions ----------------------------------------------------------------*/
 
@@ -52,6 +56,8 @@ void plcIOInit(void)
     extern void devIOInit(void);
     devIOInit();
 #endif
+    LED_RUN_OFF();
+    LED_STOP_ON();
 }
 
 /**
@@ -247,8 +253,7 @@ void plcLocalDqOutputWhenStopped(void)
   */
 void plcLocalAiRefresh(void)
 {
-	//test
-    *(REAL *)&I[12] = 3.14159;
+
 }
 
 /**
@@ -257,4 +262,37 @@ void plcLocalAiRefresh(void)
 void plcLocalAqRefresh(void)
 {
 
+}
+
+extern void pwmPeriodSet(uint16_t period);
+extern void pwmOutputUpdate(uint8_t ch, uint16_t period, uint8_t duty, uint8_t mode);
+
+void plcLocalPwmOutputWhenStopped(void)
+{
+    pwmPeriodSet(0);
+}
+
+void plcLocalPwmOutputRefresh(void)
+{
+#if (LOC_PWM_NUM > 0)
+    uint16_t period;
+    uint8_t duty;
+    uint8_t mode;
+    for(int i = 0; i < LOC_PWM_NUM; i++){
+        period = *(uint16_t*)&Q[LOC_PWM_CTRL_BASE + i * sizeof(PWM_OUT_CTRL_S)];
+        duty = (uint8_t)Q[LOC_PWM_CTRL_BASE + i * sizeof(PWM_OUT_CTRL_S) + 2];
+        mode = (uint8_t)Q[LOC_PWM_CTRL_BASE + i * sizeof(PWM_OUT_CTRL_S) + 3];
+        if(period != PwmOutCtrl[i].period){
+            pwmPeriodSet(period);
+        }
+        if((period != PwmOutCtrl[i].period) || (duty != PwmOutCtrl[i].duty) || (mode != PwmOutCtrl[i].mode)){
+            //参数有变化，更新输出
+            pwmOutputUpdate(i, period, duty, mode);
+            //保存参数
+            PwmOutCtrl[i].period = period;
+            PwmOutCtrl[i].duty = duty;
+            PwmOutCtrl[i].mode = mode;
+        }
+    }
+#endif
 }

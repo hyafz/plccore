@@ -15,11 +15,6 @@ extern void debugOutput(unsigned int code);
 
 typedef union Current_Result_Union
 {
-#if (DT_64BIT_EN == 1)
-	UINT64         value;
-#else
-	UINT32         value;
-#endif
     USINT          usintv;         /*usint*/
     SINT           sintv;          /*sint*/
     UINT           uintv;          /*uint*/
