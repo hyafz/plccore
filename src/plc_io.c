@@ -283,11 +283,18 @@ void plcLocalPwmOutputRefresh(void)
         duty = (uint8_t)Q[LOC_PWM_CTRL_BASE + i * sizeof(PWM_OUT_CTRL_S) + 2];
         mode = (uint8_t)Q[LOC_PWM_CTRL_BASE + i * sizeof(PWM_OUT_CTRL_S) + 3];
         if(period != PwmOutCtrl[i].period){
+#ifdef RT_USING_DEVICE
+
+#else
             pwmPeriodSet(period);
+#endif
         }
         if((period != PwmOutCtrl[i].period) || (duty != PwmOutCtrl[i].duty) || (mode != PwmOutCtrl[i].mode)){
             //参数有变化，更新输出
+#ifdef RT_USING_DEVICE
+#else
             pwmOutputUpdate(i, period, duty, mode);
+#endif
             //保存参数
             PwmOutCtrl[i].period = period;
             PwmOutCtrl[i].duty = duty;
