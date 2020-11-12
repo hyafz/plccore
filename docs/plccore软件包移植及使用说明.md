@@ -680,32 +680,13 @@ void iapModeEnter(void)
 
 ```
 
-### 从examples/目录下 剪切 main.c，替换RT-Thread Studio工程自动生成的main.c文件
+### 修改main.c文件
 
-> ***注意是剪切，不能在工程里保留两个main.c文件。***
-
-main.c
-```
-/*
- * Copyright (c) 2006-2019, RT-Thread Development Team
- *
- * SPDX-License-Identifier: Apache-2.0
- *
- * Change Logs:
- * Date           Author       Notes
- * 2019-09-09     RT-Thread    first version
- */
-
-#include <rtthread.h>
-
-#define DBG_TAG "main"
-#define DBG_LVL DBG_LOG
-#include <rtdbg.h>
-
-extern void plcMain(void);
-
+在main函数中添加如下代码：
+```c
 int main(void)
 {
+    extern void plcMain(void);
     plcMain();
 
     while (1)
