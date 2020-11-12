@@ -1,7 +1,7 @@
 /**
   * @file  plc_comm.c
   * @brief  PLC通信功能的实现
-  * @author hyafz   
+  * @author fengzhou   
   */
 /* includes -----------------------------------------------------------------*/
 #include <string.h>

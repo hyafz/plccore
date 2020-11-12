@@ -1,3 +1,8 @@
+/**
+  * @file  plc_std_fc.c
+  * @brief     PLC标准功能实现文件
+  * @author    fengzhou
+  */
 #include "plc_cr.h"
 #include <stdlib.h>
 #include <math.h>

@@ -1,7 +1,7 @@
 /**
   * @file  plc_cr.h
   * @brief     plc_cr.c的头文件
-  * @author    hyafz
+  * @author    fengzhou
   */
 
 #ifndef _PLC_CR_H_

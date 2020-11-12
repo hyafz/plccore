@@ -1,7 +1,7 @@
 /**
  * @file  plc_cfg.h
  * @brief plc_cfg.c的头文件
- * @author hyafz  
+ * @author fengzhou  
  */
 
 #ifndef _PLC_CFG_H_

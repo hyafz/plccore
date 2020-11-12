@@ -1,7 +1,7 @@
 /**
   * @file  plc_stat.h
   * @brief     plc_stat.c的头文件
-  * @author    hyafz
+  * @author    fengzhou
   */
 
 #ifndef _PLC_STAT_H

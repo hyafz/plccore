@@ -1,7 +1,7 @@
 /**
   * @file  plc_define.h
   * @brief PLC内部一些常量定义 
-  * @author hyafz
+  * @author fengzhou
  */
 #ifndef _PLC_DEFINE_H_
 #define _PLC_DEFINE_H_

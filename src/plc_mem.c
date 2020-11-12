@@ -1,7 +1,7 @@
 /**
   * @file  plc_mem.c
   * @brief  PLC用户存储映像区相关的实现
-  * @author  hyafz
+  * @author  fengzhou
   */
 #include "plc_mem.h"
 #include <string.h>

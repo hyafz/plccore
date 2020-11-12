@@ -1,7 +1,7 @@
 /**
   * @file  plc_timer.c
   * @brief  PLC与定时相关的实现，PLC定时器的时基固定为1毫秒。
-  * @author  hyafz    
+  * @author  fengzhou    
   */
 /* includes -----------------------------------------------------------------*/
 #include <rtthread.h>

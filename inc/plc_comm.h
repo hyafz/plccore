@@ -1,7 +1,7 @@
 /**
   * @file  plc_comm.h
   * @brief     PLC通信功能头文件
-  * @author    hyafz     
+  * @author    fengzhou     
   */
 
 #ifndef _PLC_COMM_H

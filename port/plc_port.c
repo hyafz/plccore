@@ -1,7 +1,7 @@
 /**
   * @file  plc_port.c
   * @brief  PLC处理器接口相关的实现
-  * @author  hyafz
+  * @author  fengzhou
   */
 
 #include "plc_port.h"

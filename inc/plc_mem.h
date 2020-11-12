@@ -1,7 +1,7 @@
 /**
   * @file  plc_mem.h
   * @brief     PLC存储区相关定义及操作宏头文件
-  * @author    hyafz 
+  * @author    fengzhou 
   */
 #ifndef _PLC_MEM_H_
 #define _PLC_MEM_H_

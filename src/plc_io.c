@@ -1,7 +1,7 @@
 /**
   * @file  plc_io.c
   * @brief  PLC与输入输出相关的实现
-  * @author  hyafz
+  * @author  fengzhou
   */
 /* includes -----------------------------------------------------------------*/
 #include <string.h>

@@ -1,7 +1,7 @@
 /**
   * @file  plc_std_fb.h
   * @brief     plc_std_fb.c的头文件
-  * @author    hyafz
+  * @author    fengzhou
   */
 
 #ifndef _PLC_STANDARD_FB_H_

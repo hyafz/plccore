@@ -1,7 +1,7 @@
 /**
   * @file     plc_stat.c
   * @brief    PLC运行统计功能的实现.
-  * @author   hyafz
+  * @author   fengzhou
 **/
 /* includes -----------------------------------------------------------------*/
 #include <string.h>

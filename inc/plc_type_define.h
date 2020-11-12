@@ -1,7 +1,7 @@
 /**
   * @file  plc_type_define.h
   * @brief     通用数据类型定义
-  * @author    hyafz
+  * @author    fengzhou
   */
 #ifndef _PLC_TYPE_DEFINE_H_
 #define _PLC_TYPE_DEFINE_H_

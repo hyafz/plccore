@@ -1,7 +1,7 @@
 /**
   * @file  plc_debug.c
   * @brief 调试信息输出功能实现文件
-  * @author hyafz
+  * @author fengzhou
   */
 
 /* includes -----------------------------------------------------------------*/

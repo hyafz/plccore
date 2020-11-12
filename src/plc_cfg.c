@@ -1,7 +1,7 @@
 /**
   * @file  plc_cfg.c
   * @brief     符合IEC61131-3标准的PLC配置元素相关功能源文件
-  * @author    hyafz
+  * @author    fengzhou
   */
 /* includes -----------------------------------------------------------------*/
 #include <string.h>

@@ -1,7 +1,7 @@
 /**
  * @file plc_port.h
  * @brief 资源处理器接口相关选项设置，制造商通过修改本文件对自己的处理器进行裁剪定制。
- * @author hyafz
+ * @author fengzhou
  */
 
 #ifndef PLC_PORT_H

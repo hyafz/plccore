@@ -1,7 +1,7 @@
 /**
   * @file  plc_main.c
   * @brief  实现符合IEC61131标准的PLC运行时系统
-  * @author hyafz   
+  * @author fengzhou   
   */
 /* includes -----------------------------------------------------------------*/
 #include "plc_cfg.h"
