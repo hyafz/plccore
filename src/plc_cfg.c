@@ -422,6 +422,7 @@ void plcRscRun(RSC_CB_S* pRscCB)
 	/*资源运行时变量初始化*/
 	plcRscRunTimeInit(pRscCB);
 	LED_RUN_ON();
+	LED_STOP_OFF();
 	debugOutput(PLC_EVT_BEGIN_TO_RUN);	
 		
 	/* 记录资源启动时间 */
@@ -445,6 +446,7 @@ void plcRscStop(RSC_CB_S* pRscCB)
 	statClear();
 	
 	LED_RUN_OFF();
+	LED_STOP_ON();
 	debugOutput(PLC_EVT_STOPPED);
 }
 
