@@ -175,10 +175,10 @@ void plcRscRunStatusUpdate(RSC_CB_S* pRscCB)
 		updateGapTime = 0;
 		pRscCB->updateTime = msTime;
 		/* 更新运行时统计数据 */
-		//statEventAdd(PLC_TASK_LOWEST_PRIORITY + 1, SE_RSC_UPDATE);
-		//plcRscStatDataOutput(pRscCB);
+		statEventAdd(PLC_TASK_LOWEST_PRIORITY + 1, SE_RSC_UPDATE);
+		plcRscStatDataOutput(pRscCB);
 		/* 更新M区数据 */
-		//plcCommDataFrameSend(CMD_M_OUTPUT, M, sizeof(M));
+		plcCommDataFrameSend(CMD_M_OUTPUT, M, sizeof(M));
 	}
 }
 

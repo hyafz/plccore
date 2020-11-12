@@ -1719,8 +1719,8 @@ extern GE_WORD_S _GE_WORD;
 #define _GE_WORD_()	(_GE_WORD.IN1 >= _GE_WORD.IN2)
 
 typedef struct{
-    DWORD IN0;
     DWORD IN1;
+    DWORD IN2;
 }GE_DWORD_S;
 extern GE_DWORD_S _GE_DWORD;
 #define _GE_DWORD_()	(_GE_DWORD.IN1 >= _GE_DWORD.IN2)
@@ -1839,8 +1839,8 @@ extern EQ_WORD_S _EQ_WORD;
 #define _EQ_WORD_()	(_EQ_WORD.IN1 == _EQ_WORD.IN2)
 
 typedef struct{
-    DWORD IN0;
     DWORD IN1;
+    DWORD IN2;
 }EQ_DWORD_S;
 extern EQ_DWORD_S _EQ_DWORD;
 #define _EQ_DWORD_()	(_EQ_DWORD.IN1 == _EQ_DWORD.IN2)
@@ -1920,7 +1920,7 @@ typedef struct{
     REAL IN2;
 }EQ_REAL_S;
 extern EQ_REAL_S _EQ_REAL;
-#define _EQ_REAL_()	(_EQ_REAL.IN1 == _EQ_REAL.IN2)
+#define _EQ_REAL_()	(fabs(_EQ_REAL.IN1 - _EQ_REAL.IN2) < 1e-6)
 #endif
 
 #if (DT_LREAL_EN > 0)
@@ -1929,7 +1929,7 @@ typedef struct{
     LREAL IN2;
 }EQ_LREAL_S;
 extern EQ_LREAL_S _EQ_LREAL;
-#define _EQ_LREAL_()	(_EQ_LREAL.IN1 == _EQ_LREAL.IN2)
+#define _EQ_LREAL_()	(fabs(_EQ_LREAL.IN1 - _EQ_LREAL.IN2) < 1e-15)
 #endif
 
 /*
@@ -1959,8 +1959,8 @@ extern LE_WORD_S _LE_WORD;
 #define _LE_WORD_()	(_LE_WORD.IN1 <= _LE_WORD.IN2)
 
 typedef struct{
-    DWORD IN0;
     DWORD IN1;
+    DWORD IN2;
 }LE_DWORD_S;
 extern LE_DWORD_S _LE_DWORD;
 #define _LE_DWORD_()	(_LE_DWORD.IN1 <= _LE_DWORD.IN2)
@@ -2079,8 +2079,8 @@ extern LT_WORD_S _LT_WORD;
 #define _LT_WORD_()	(_LT_WORD.IN1 < _LT_WORD.IN2)
 
 typedef struct{
-    DWORD IN0;
     DWORD IN1;
+    DWORD IN2;
 }LT_DWORD_S;
 extern LT_DWORD_S _LT_DWORD;
 #define _LT_DWORD_()	(_LT_DWORD.IN1 < _LT_DWORD.IN2)
@@ -2199,8 +2199,8 @@ extern NE_WORD_S _NE_WORD;
 #define _NE_WORD_()	(_NE_WORD.IN1 != _NE_WORD.IN2)
 
 typedef struct{
-    DWORD IN0;
     DWORD IN1;
+    DWORD IN2;
 }NE_DWORD_S;
 extern NE_DWORD_S _NE_DWORD;
 #define _NE_DWORD_()	(_NE_DWORD.IN1 != _NE_DWORD.IN2)
@@ -2280,7 +2280,7 @@ typedef struct{
     REAL IN2;
 }NE_REAL_S;
 extern NE_REAL_S _NE_REAL;
-#define _NE_REAL_()	(_NE_REAL.IN1 != _NE_REAL.IN2)
+#define _NE_REAL_()	(fabs((_NE_REAL.IN1 - _NE_REAL.IN2)) >= 1e-6)
 #endif
 
 #if (DT_LREAL_EN > 0)
@@ -2289,7 +2289,7 @@ typedef struct{
     LREAL IN2;
 }NE_LREAL_S;
 extern NE_LREAL_S _NE_LREAL;
-#define _NE_LREAL_()	(_NE_LREAL.IN1 != _NE_LREAL.IN2)
+#define _NE_LREAL_()	(fabs(_NE_LREAL.IN1 - _NE_LREAL.IN2) >= 1e-15)
 #endif
 
 
