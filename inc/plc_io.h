@@ -69,6 +69,15 @@ typedef struct Device_Output_Control_Struct{
     int                 out_value;                /**< 当前输出GPIO PIN状态 */
 }DEV_OUT_CTRL_S;
 
+/**
+ * @struct PWM输出控制结构体类型
+ */
+typedef struct PWM_Output_Control_Struct{
+    uint16_t            period;                 /**< 周期，单位us */
+    uint8_t             duty;                   /**< 占空比 */
+    uint8_t             mode;                   /**< 模式 */
+}PWM_OUT_CTRL_S;
+
 /* Export variables declaration ---------------------------------------------*/
 /* Export function declaration ----------------------------------------------*/
 void plcIOInit(void);
@@ -80,7 +89,7 @@ void plcLocalDqRefresh(void);
 void plcLocalDqOutputWhenStopped(void);
 void plcLocalAiRefresh(void);
 void plcLocalAqRefresh(void);
-
-
+void plcLocalPwmOutputWhenStopped(void);
+void plcLocalPwmOutputRefresh(void);
 #endif
 

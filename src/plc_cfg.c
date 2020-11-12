@@ -15,7 +15,9 @@
 #include "plc_io.h"
 #include "plc_comm.h"
 #include "plc_stat.h"
-#include "configuration.h"	//plctoc生成的文件
+
+extern void _configuration_init_(void);
+
 /* Private define -----------------------------------------------------------*/
 /*任务属性相关定义*/
 #define TASK_SINGLE_EN                 0x8000  /*SINGLE参数使能标识*/
@@ -137,6 +139,7 @@ static void plcRscRunCycleOver(RSC_CB_S* pRsc)
 	begin = plcTimeUsecGet();
 	plcLocalDqRefresh();
 	plcLocalAqRefresh();
+	plcLocalPwmOutputRefresh();
 	
 	/* 记录资源主循环周期结束时间 */
 	//pRsc->cycleEnd = statEventAdd(PLC_TASK_LOWEST_PRIORITY + 1, SE_RSC_CYCLE_OVER);
