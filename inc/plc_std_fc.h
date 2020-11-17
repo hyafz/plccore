@@ -552,7 +552,7 @@ typedef struct{
 }DIV_SINT_S;
 extern DIV_SINT_S _DIV_SINT;
 #define _DIV_SINT_()	((_DIV_SINT.IN2 == 0) ? \
-                         (_DIV_SINT.IN1 / _DIV_SINT.IN2))
+        0 :  (_DIV_SINT.IN1 / _DIV_SINT.IN2))
 
 typedef struct{
     INT IN1;
@@ -560,7 +560,7 @@ typedef struct{
 }DIV_INT_S;
 extern DIV_INT_S _DIV_INT;
 #define _DIV_INT_()	((_DIV_INT.IN2 == 0) ? \
-                         (_DIV_INT.IN1 / _DIV_INT.IN2))
+        0 : (_DIV_INT.IN1 / _DIV_INT.IN2))
 
 typedef struct{
     DINT IN1;
@@ -568,7 +568,7 @@ typedef struct{
 }DIV_DINT_S;
 extern DIV_DINT_S _DIV_DINT;
 #define _DIV_DINT_()	((_DIV_DINT.IN2 == 0) ? \
-                         (_DIV_DINT.IN1 / _DIV_DINT.IN2))
+        0 : (_DIV_DINT.IN1 / _DIV_DINT.IN2))
 
 #if (DT_LINT_EN > 0)
 typedef struct{
@@ -577,7 +577,7 @@ typedef struct{
 }DIV_LINT_S;
 extern DIV_LINT_S _DIV_LINT;
 #define _DIV_LINT_()	((_DIV_LINT.IN2 == 0) ? \
-                         (_DIV_LINT.IN1 / _DIV_LINT.IN2))
+        0 : (_DIV_LINT.IN1 / _DIV_LINT.IN2))
 #endif
 
 typedef struct{
@@ -586,7 +586,7 @@ typedef struct{
 }DIV_USINT_S;
 extern DIV_USINT_S _DIV_USINT;
 #define _DIV_USINT_()	((_DIV_USINT.IN2 == 0) ? \
-                         (_DIV_USINT.IN1 / _DIV_USINT.IN2))
+        0 : (_DIV_USINT.IN1 / _DIV_USINT.IN2))
 
 typedef struct{
     UINT IN1;
@@ -594,7 +594,7 @@ typedef struct{
 }DIV_UINT_S;
 extern DIV_UINT_S _DIV_UINT;
 #define _DIV_UINT_()	((_DIV_UINT.IN2 == 0) ? \
-                         (_DIV_UINT.IN1 / _DIV_UINT.IN2))
+        0 : (_DIV_UINT.IN1 / _DIV_UINT.IN2))
 
 typedef struct{
     UDINT IN1;
@@ -602,7 +602,7 @@ typedef struct{
 }DIV_UDINT_S;
 extern DIV_UDINT_S _DIV_UDINT;
 #define _DIV_UDINT_()	((_DIV_UDINT.IN2 == 0) ? \
-                         (_DIV_UDINT.IN1 / _DIV_UDINT.IN2))
+        0 : (_DIV_UDINT.IN1 / _DIV_UDINT.IN2))
 
 #if (DT_LINT_EN > 0)
 typedef struct{
@@ -611,7 +611,7 @@ typedef struct{
 }DIV_ULINT_S;
 extern DIV_ULINT_S _DIV_ULINT;
 #define _DIV_ULINT_()	((_DIV_ULINT.IN2 == 0) ? \
-                         (_DIV_ULINT.IN1 / _DIV_ULINT.IN2))
+        0 : (_DIV_ULINT.IN1 / _DIV_ULINT.IN2))
 #endif
 
 #if (DT_REAL_EN > 0)
@@ -621,7 +621,7 @@ typedef struct{
 }DIV_REAL_S;
 extern DIV_REAL_S _DIV_REAL;
 #define _DIV_REAL_()	((_DIV_REAL.IN2 == 0) ? \
-                         (_DIV_REAL.IN1 / _DIV_REAL.IN2))
+        0 : (_DIV_REAL.IN1 / _DIV_REAL.IN2))
 #endif
 
 #if (DT_LREAL_EN > 0)
