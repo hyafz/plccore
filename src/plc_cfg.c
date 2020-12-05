@@ -439,9 +439,12 @@ void plcRscRun(RSC_CB_S* pRscCB)
 void plcRscStop(RSC_CB_S* pRscCB)
 {
 	plcLocalDqOutputWhenStopped();
+	plcLocalPwmOutputWhenStopped();
 	/* 记录资源停机时间 */
 	pRscCB->stopTime = statEventAdd(PLC_TASK_LOWEST_PRIORITY + 1, SE_RSC_STOP);
 	plcRscStatDataOutput(pRscCB);	
+    /* 更新M区数据 */
+    plcCommDataFrameSend(CMD_M_OUTPUT, M, sizeof(M));
 	statOutput();	/* 资源停机时输出统计数据，然后清除。 */
 	statClear();
 	

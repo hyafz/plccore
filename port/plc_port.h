@@ -48,6 +48,7 @@
 #define QX3_PIN         GET_PIN(B, 5)
 #define QX4_PIN         GET_PIN(B, 6)
 #define QX5_PIN         GET_PIN(B, 7)
+#define QX6_PIN         GET_PIN(B, 8)
 #define DO_INIT_INFO \
 { /* pin, off_value, on_value, out_value */ \
     { LED_RUN_PIN,   0 , 1 , 0 }, /* LED RUN */ \
@@ -59,6 +60,7 @@
     { QX3_PIN,       0 , 1 , 0 }, /* QX3 */ \
     { QX4_PIN,       0 , 1 , 0 }, /* QX4 */ \
     { QX5_PIN,       0 , 1 , 0 }, /* QX5 */ \
+    { QX6_PIN,       0 , 1 , 0 }, /* QX6 */ \
 }
 
 #define MAX_I_RANGE             256         /**< 输入映像区字节数 */
@@ -66,12 +68,12 @@
 #define MAX_M_RANGE             256         /**< 内存映像区字节数 */
 
 #define LOC_DI_NUM              8           /**< 本地8点数字量输入 */
-#define LOC_DQ_NUM              6           /**< 本地6点数字量输出 */
+#define LOC_DQ_NUM              7           /**< 本地7点数字量输出 */
 
 #define LOC_AI_NUM              1
 #define LOC_AQ_NUM              1
 
-#define LOC_PWM_NUM             2           /**< 本地PWM输出通道数目 */
+#define LOC_PWM_NUM             1           /**< 本地PWM输出通道数目 */
 #define LOC_PWM_CTRL_BASE       248         /**< 本地PWM输出控制参数在Q区的起始映射地址，控制参数区占用4字节：
                                                  Byte 1 ~ 2: PWM周期，单位us，为0则停止输出
                                                  Byte 3    : PWM占空比 0 ~ 100，为0则停止输出

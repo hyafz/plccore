@@ -65,10 +65,6 @@ static void MX_TIM4_Init(uint16_t period, uint8_t duty)
   sConfigOC.Pulse = period * duty / 100;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
-  {
-    Error_Handler();
-  }
   if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
   {
     Error_Handler();
@@ -181,7 +177,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
-                          |GPIO_PIN_7, GPIO_PIN_RESET);
+                          |GPIO_PIN_7|GPIO_PIN_8, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PC13 PC14 PC15 */
   GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
@@ -212,9 +208,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PB3 PB4 PB5 PB6
-                           PB7 */
+                           PB7 PB8 */
   GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
-                          |GPIO_PIN_7;
+                          |GPIO_PIN_7|GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -322,7 +318,6 @@ void devOutputPinWrite(unsigned int pin, unsigned int val)
 
 void pwmPeriodSet(uint16_t period)
 {
-    HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_3);
     HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_4);
     HAL_TIM_Base_DeInit(&htim4);
     MX_TIM4_Init(period, 50);
@@ -335,8 +330,6 @@ void pwmOutputUpdate(uint8_t ch, uint16_t period, uint8_t duty, uint8_t mode)
     uint32_t oc_mode;
 
     if(ch == 0){
-        tim_ch = TIM_CHANNEL_3;
-    }else if(ch == 1){
         tim_ch = TIM_CHANNEL_4;
     }else{
         return;

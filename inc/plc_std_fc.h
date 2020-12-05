@@ -1230,24 +1230,24 @@ typedef struct{
     DINT N;
 }ROL_BYTE_S;
 extern ROL_BYTE_S _ROL_BYTE;
-#define _ROL_BYTE_()	((BYTE)((_ROL_BYTE.IN << (_ROR_BYTE.N % 8)) \
-                                | (_ROL_BYTE.IN >> (8 - (_ROR_BYTE.N % 8)))))
+#define _ROL_BYTE_()	((BYTE)((_ROL_BYTE.IN << (_ROL_BYTE.N % 8)) \
+                                | (_ROL_BYTE.IN >> (8 - (_ROL_BYTE.N % 8)))))
 
 typedef struct{
     WORD IN;
     DINT N;
 }ROL_WORD_S;
 extern ROL_WORD_S _ROL_WORD;
-#define _ROL_WORD_()	((WORD)((_ROL_WORD.IN << (_ROR_WORD.N % 16)) \
-                                | (_ROL_WORD.IN >> (16 - (_ROR_WORD.N % 16)))))
+#define _ROL_WORD_()	((WORD)((_ROL_WORD.IN << (_ROL_WORD.N % 16)) \
+                                | (_ROL_WORD.IN >> (16 - (_ROL_WORD.N % 16)))))
 
 typedef struct{
     DWORD IN;
     DINT N;
 }ROL_DWORD_S;
 extern ROL_DWORD_S _ROL_DWORD;
-#define _ROL_DWORD_()	((DWORD)((_ROL_DWORD.IN << (_ROR_DWORD.N % 32)) \
-                                 | (_ROL_DWORD.IN >> (32 - (_ROR_DWORD.N % 32)))))
+#define _ROL_DWORD_()	((DWORD)((_ROL_DWORD.IN << (_ROL_DWORD.N % 32)) \
+                                 | (_ROL_DWORD.IN >> (32 - (_ROL_DWORD.N % 32)))))
 
 #if (DT_LWORD_EN > 0)
 typedef struct{
@@ -1255,8 +1255,8 @@ typedef struct{
     DINT N;
 }ROL_LWORD_S;
 extern ROL_LWORD_S _ROL_LWORD;
-#define _ROL_LWORD_()	((LWORD)((_ROL_LWORD.IN << (_ROR_LWORD.N % 64)) \
-                                 | (_ROL_LWORD.IN >> (64 - (_ROR_LWORD.N % 64)))))
+#define _ROL_LWORD_()	((LWORD)((_ROL_LWORD.IN << (_ROL_LWORD.N % 64)) \
+                                 | (_ROL_LWORD.IN >> (64 - (_ROL_LWORD.N % 64)))))
 #endif
 
 /*
