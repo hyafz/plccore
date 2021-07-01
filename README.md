@@ -44,7 +44,9 @@ GitHub: https://github.com/hyafz/plccore/blob/master/docs/plccore%E8%BD%AF%E4%BB
 码云： https://gitee.com/hyafz/plccore/blob/master/docs/plccore%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%A7%BB%E6%A4%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md
 
 ## 3 如何获取上位机编程软件plcide？
-发送电子邮件至 401190549@qq.com 索取。
+通过百度网盘获取：
+链接：https://pan.baidu.com/s/1QhqtQxH-Lha5Qvx2C7pesA 
+提取码：tjd8
 
 ## 4 如何使用plcide？
 请参考软件包docs目录下给出的PLC集成开发环境用户手册：
